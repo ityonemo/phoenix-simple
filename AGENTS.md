@@ -32,6 +32,11 @@ Since this repo is currently in exploration mode, you do not need to create migr
 designed to safely migrate data, though migrations should still generally focus on one
 topic.
 
+Logins: 
+You don't have to log in using the standard oauth flow.  In development, you have access to
+`/dev/login_as/<uuid>` which will get you in as a particular user.  You can also run
+`/dev/logout` to log out.
+
 **IMPORTANT** Soft-locked modules
 Do not alter the following modules without asking for user permission first:
 `Web`
