@@ -17,11 +17,11 @@ config :my_app, Data.Repo,
   migration_foreign_key: [type: :binary_id]
 
 database_adapter =
-  case System.get_env("DATABASE_ADAPTER", "") do
+  case System.get_env("DATABASE_ADAPTER", "sqlite") do
     "sqlite" ->
       Ecto.Adapters.SQLite3
 
-    _ ->
+    "postgres" ->
       Ecto.Adapters.Postgres
   end
 

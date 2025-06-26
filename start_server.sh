@@ -16,4 +16,4 @@ fi
 
 # Start the Phoenix server
 echo "Starting Phoenix server..."
-iex -S mix
+mix phx.server

@@ -69,12 +69,6 @@ export AUTH0_HOME_URI=http://localhost:4000
 mix test
 ```
 
-(if you're in the phoenix.new environment or prefer sqlite)
-
-```bash
-DATABASE_ADAPTER=sqlite mix test
-```
-
 ## Architecture
 
 This application uses a domain-driven architecture with:
