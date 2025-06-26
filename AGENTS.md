@@ -4,15 +4,6 @@
 
 **IMPORTANT**: Use `./start_server.sh` instead of `mix phx.server`
 
-The `start_server.sh` script loads environment variables from `config/.env` that are required for OAuth integration with Auth0. This includes:
-- AUTH0_DOMAIN
-- AUTH0_CLIENT_ID  
-- AUTH0_CLIENT_SECRET
-- AUTH0_REDIRECT_URI
-- AUTH0_HOME_URI
-
-Without these environment variables, the OAuth.Auth0 module will fail to initialize properly.
-
 ## Development Commands
 
 ```bash
@@ -20,12 +11,38 @@ Without these environment variables, the OAuth.Auth0 module will fail to initial
 ./start_server.sh
 
 # Run tests
-DATABASE_ADAPTER=sqlite mix test
+mix test
 
 # Code quality checks
 mix credo --strict # <-- !important: don't forget the --strict
+```
+
+Architecture notes:
+This repo deviates from standard phoenix web architecture.  When modifying
+web components, please examine related content.  For example, for any live view,
+look at how other live views are done first.  For the router, please look at how
+the other routes are organized and stay consistent.
+
+Do not attempt to create Phoenix macros, and prefer using `alias` instead of `import`.
+
+When in doubt, consult ARCHITECTURE.md
+
+Migrations:
+Since this repo is currently in exploration mode, you do not need to create migrations
+designed to safely migrate data, though migrations should still generally focus on one
+topic.
+
+**IMPORTANT** Soft-locked modules
+Do not alter the following modules without asking for user permission first:
+`Web`
+`Oauth`
+
+**IMPORTANT** Soft-locked files
+Do not alter the following directories without asking for user permission first:
+`/config`
+`/web/error`
 
 **IMPORTANT**
-do NOT build test directory.  Tests are in /lib and are colocated.  /support contains support files.
-do NOT alter function signatures of pub functions or callbacks without prompting the user.
-do NOT alter the names of modules unless explicitly asked for.
+do not build test directory.  Tests are in `/lib` and colocated.  `/support` contains support files.
+
+** END AI INSTRUCTIONS **

@@ -80,6 +80,8 @@ defmodule MyApp.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
+      compile: [&dump_agents/1, "compile"],
+      "phx.server": [&dump_agents/1, "phx.server"],
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
@@ -92,5 +94,13 @@ defmodule MyApp.MixProject do
         "phx.digest"
       ]
     ]
+  end
+
+  defp dump_agents(_args) do
+    if System.get_env("I_AM_NOT_AN_AI", "false") == "true" do
+      "AGENTS.md"
+      |> File.read!
+      |> IO.puts()
+    end
   end
 end
