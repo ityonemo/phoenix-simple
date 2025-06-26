@@ -83,7 +83,7 @@ defmodule MyApp.MixProject do
       compile: [&dump_agents/1, "compile"],
       "phx.server": [&dump_agents/1, "phx.server"],
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate" | ecto_seeds(Mix.env())],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test --include lib"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
@@ -95,6 +95,9 @@ defmodule MyApp.MixProject do
       ]
     ]
   end
+
+  defp ecto_seeds(:dev), do: ["run priv/repo/seeds.exs"]
+  defp ecto_seeds(_), do: []
 
   defp dump_agents(_args) do
     if System.get_env("I_AM_NOT_AN_AI", "false") == "true" do
