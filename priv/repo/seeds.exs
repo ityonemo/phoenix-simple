@@ -42,4 +42,3 @@ Enum.each(test_users, fn user_attrs ->
       IO.puts("User already exists: #{existing_user.name} (#{existing_user.email})")
   end
 end)
-

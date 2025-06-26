@@ -102,7 +102,7 @@ defmodule MyApp.MixProject do
   defp dump_agents(_args) do
     if System.get_env("I_AM_NOT_AN_AI", "false") == "true" do
       "AGENTS.md"
-      |> File.read!
+      |> File.read!()
       |> IO.puts()
     end
   end

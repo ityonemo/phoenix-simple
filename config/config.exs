@@ -67,6 +67,8 @@ config :phoenix, :json_library, JSON
 
 config :my_app, :oauth_modules, [OAuth.Cache, OAuth.Auth0]
 
+config :my_app, :env, config_env()
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

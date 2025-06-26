@@ -29,6 +29,10 @@ defmodule Web.Router do
     plug :authenticate, :user
   end
 
+  pipeline :localhost_only do
+    plug :require_localhost
+  end
+
   scope "/", Web do
     pipe_through :browser
     get "/", Home, :index
@@ -56,11 +60,6 @@ defmodule Web.Router do
     live "/dashboard", DashboardLive, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Web do
-  #   pipe_through :api
-  # end
-
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:my_app, :dev_routes) do
     import Phoenix.LiveDashboard.Router
@@ -69,6 +68,15 @@ defmodule Web.Router do
       pipe_through :browser
 
       live_dashboard "/dashboard", metrics: Web.Telemetry
+    end
+  end
+
+  if Application.compile_env(:my_app, :env) == :dev do
+    scope "/dev" do
+      pipe_through [:browser, :localhost_only]
+
+      get "/login_as/:id", Web.DevController, :login_as
+      get "/logout", Web.DevController, :logout
     end
   end
 
@@ -99,6 +107,46 @@ defmodule Web.Router do
 
       :else ->
         assign(conn, :current_user, nil)
+    end
+  end
+
+  defp require_localhost(conn, _opts) do
+    # Check for proxy headers - if any are present, this is an external request
+    x_forwarded_for = Plug.Conn.get_req_header(conn, "x-forwarded-for")
+    x_real_ip = Plug.Conn.get_req_header(conn, "x-real-ip")
+    forwarded = Plug.Conn.get_req_header(conn, "forwarded")
+
+    proxy_headers_present =
+      !Enum.empty?(x_forwarded_for) or
+        !Enum.empty?(x_real_ip) or
+        !Enum.empty?(forwarded)
+
+    cond do
+      # If any proxy headers are present, reject
+      proxy_headers_present ->
+        conn
+        |> Phoenix.Controller.put_flash(
+          :error,
+          "Access denied. This endpoint is only available from localhost."
+        )
+        |> Phoenix.Controller.redirect(to: "/")
+        |> Conn.halt()
+        |> Phoenix.Controller.redirect(to: "/")
+        |> Conn.halt()
+
+      # Only allow true localhost IPs with no proxy headers
+      conn.remote_ip == {127, 0, 0, 1} or
+          conn.remote_ip == {0, 0, 0, 0, 0, 0, 0, 1} ->
+        conn
+
+      :else ->
+        conn
+        |> Phoenix.Controller.put_flash(
+          :error,
+          "Access denied. This endpoint is only available from localhost."
+        )
+        |> Phoenix.Controller.redirect(to: "/")
+        |> Conn.halt()
     end
   end
 end
