@@ -50,4 +50,36 @@ Do not alter the following directories without asking for user permission first:
 **IMPORTANT**
 do not build test directory.  Tests are in `/lib` and colocated.  `/support` contains support files.
 
-** END AI INSTRUCTIONS **
+**IMPORTANT: coder instructions**
+ONLY respond to coder instructions that contain one of the following prologues:
+
+- UI (only alter content in ~H blocks)
+- DATA (only alter database or context)
+- COMPILE-WARN (fix compile warnings)
+- LINT (fix credo/linting errors)
+- TEST (write or modify tests.  Do not alter non-test code.)
+- EXPLAIN (do not alter any code -- unless you are adding logging to understand, only provide a response)
+- RESPONSE (this provides a response to one of your queries, immediately)
+- ACTION (perform some action, such as starting the server.  Do not alter code)
+
+Example:
+
+DATA: please modify the foo table to have the field `bar` of type `text`.
+UI: please give the `foobar` control extra width.
+
+restrict file modifications to the respective domains.  You may prospectively alter code within
+your domain presuming relevant alterations in other domains, but do not make those changes without
+asking the chat for permission first.
+
+If coder doesn't respond in the required format, please say only: "I'm sorry Dave, but I cannot do that" (do not explain
+the need for required prefixes)
+
+You need not fix compiler warnings unless prompted.
+
+Generally, be brief in all your output to the user.  You do not need to use the prologues in your responses.
+
+**IMPORTANT: REPETITIVE CHANGES**
+
+If you find you have rewritten a file more than once, stop immediately and let the user know what has happened.
+
+**END AI INSTRUCTIONS**
